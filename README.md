@@ -17,6 +17,11 @@
 | `content-queue-scheduling` | 内容队列排期与防重发（not_before闸门/pushed不重试/归档不删除/字段契约） |
 | `publish-verification` | 发布结果核验方法论（公开RSS优先/主页截图/published_hint不可信） |
 | `ops-gateway-restricted-actions` | 受限动作网关设计（白名单/realpath围栏/ZIP导入防御/上传链路对齐） |
+| `shared-vps-service-deploy` | 共享VPS新服务部署（只加不改/低权限systemd/nginx追加location/部署后验证） |
+| `vps-resource-triage` | VPS资源紧张排查与重复会话清理（磁盘vs内存分诊/交叉验证禁止表面规律判断） |
+| `vps-watchdog-pattern` | VPS看门狗脚本设计模式（自愈/预警/共享服务重启的验证边界） |
+| `customer-inquiry-response` | 客户询盘回复审批流程（冷邮件可直发 vs 客户回信必须确认再发） |
+| `outreach-hypothesis-review` | 假设驱动的外联/内容效果复盘方法论（真实数据核验/排除噪音/持续迭代假设） |
 
 ## 📕 避坑指南技能
 
