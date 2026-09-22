@@ -13,6 +13,10 @@
 | `ai-pcb-generation` | AI PCB自动生成（Altium Designer逆向/OLE2格式/自动布局布线） |
 | `enterprise-email-setup` | 企业邮箱系统搭建（Zoho/DNS/DKIM/SMTP配置） |
 | `chinapal-ai-operations` | AI聚合平台运营（SEO/博主合作/流量获取） |
+| `cloud-phone-adb-publishing` | 云手机ADB视频发布全链路（ADB就绪时序/深度链接/只读核验/成本控制） |
+| `content-queue-scheduling` | 内容队列排期与防重发（not_before闸门/pushed不重试/归档不删除/字段契约） |
+| `publish-verification` | 发布结果核验方法论（公开RSS优先/主页截图/published_hint不可信） |
+| `ops-gateway-restricted-actions` | 受限动作网关设计（白名单/realpath围栏/ZIP导入防御/上传链路对齐） |
 
 ## 📕 避坑指南技能
 
