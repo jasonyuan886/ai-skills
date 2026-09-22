@@ -1,22 +1,11 @@
-# short-video-batch
-
-## name
-short-video-batch
-
-## description
-短视频批量制作与多平台发布技能。覆盖YouTube Shorts、Pinterest Video Pin、TikTok等平台的竖版短视频全流程制作，包括选题策划、AI素材生成、Ken Burns动效制作、音频配音、字幕叠加、多平台规格适配、批量发布管理。基于真实发布经验：YouTube 8条视频全部公开发布、Pinterest每日双站（EN/JP）发布、赵家驹热点短视频10条批量交付（总成本仅¥9）、ChinaPal TikTok视频制作。核心能力：即梦生成素材→剪映二次编辑（加字幕/BGM/转场/AI声明）→多平台发布的完整SOP。
-
-## 触发条件
-当用户需要以下场景时触发本技能：
-- 批量制作短视频（2条以上）
-- 制作YouTube Shorts / TikTok / Pinterest视频
-- Ken Burns动效视频制作
-- 热点追踪快速出视频
-- 视频多平台适配与发布
-- 视频制作成本优化
-- 视频SOP流程执行
-
 ---
+name: short-video-batch
+description: |
+  短视频批量制作与多平台发布技能。覆盖YouTube Shorts、Pinterest Video Pin、TikTok等平台的竖版短视频全流程制作，包括选题策划、AI素材生成、Ken Burns动效制作、音频配音、字幕叠加、多平台规格适配、批量发布管理。基于真实发布经验：YouTube 8条视频全部公开发布、Pinterest每日双站（EN/JP）发布、赵家驹热点短视频10条批量交付（总成本仅¥9）、ChinaPal TikTok视频制作。核心能力：即梦生成素材→剪映二次编辑（加字幕/BGM/转场/AI声明）→多平台发布的完整SOP。
+  触发场景：批量制作短视频（2条以上）、制作YouTube Shorts/TikTok/Pinterest视频、Ken Burns动效视频制作、热点追踪快速出视频、视频多平台适配与发布、视频制作成本优化、视频SOP流程执行。
+---
+
+# short-video-batch
 
 ## 执行流程
 

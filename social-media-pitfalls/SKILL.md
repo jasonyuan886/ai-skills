@@ -1,8 +1,10 @@
-# 社媒运营避坑指南
+---
+name: social-media-pitfalls
+description: |
+  社媒运营避坑指南，基于LinkedIn/TG/X真实踩坑经验，涵盖账号持久登录、自动化工具拦截、登录卡点、回复权限管理、操作通道规范等核心问题。
+---
 
-- **name**: social-media-pitfalls
-- **description**: 社媒运营避坑指南，基于LinkedIn/TG/X真实踩坑经验，涵盖账号持久登录、自动化工具拦截、登录卡点、回复权限管理、操作通道规范等核心问题
-- **version**: 1.0.0
+# 社媒运营避坑指南
 
 ## 适用场景
 

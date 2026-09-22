@@ -1,12 +1,12 @@
-# DTC独立站运营技能
-
-## 技能元数据
-- **name**: dtc-site-operations
-- **description**: DTC独立站全链路运营，包括建站部署、SEO/GEO优化、PayPal支付集成、信任体系建设，基于FreshLock真实项目经验
-- **适用场景**: 从零搭建DTC独立站、优化现有独立站SEO/GEO、集成PayPal支付、建立网站信任体系
-- **触发关键词**: DTC独立站、独立站运营、SEO优化、GEO优化、PayPal集成、Vercel部署、Cloudflare CDN、信任建设
-
 ---
+name: dtc-site-operations
+description: |
+  DTC独立站全链路运营，包括建站部署、SEO/GEO优化、PayPal支付集成、信任体系建设，基于FreshLock真实项目经验。
+  适用场景：从零搭建DTC独立站、优化现有独立站SEO/GEO、集成PayPal支付、建立网站信任体系。
+  触发关键词：DTC独立站、独立站运营、SEO优化、GEO优化、PayPal集成、Vercel部署、Cloudflare CDN、信任建设。
+---
+
+# DTC独立站运营技能
 
 ## 执行流程
 

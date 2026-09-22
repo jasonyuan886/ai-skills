@@ -1,9 +1,10 @@
+---
+name: chinapal-ai-operations
+description: |
+  ChinaPal AI平台全流程运营技能，基于aihubai.cn真实运营经验。覆盖AI聚合平台从0到1运营、SEO内容创作、博客矩阵搭建、博主合作外联、流量路径规划、技术功能开发。适用于AI产品聚合平台运营、出海内容营销、独立站SEO优化、博主合作获客等场景。
+---
+
 # chinapal-ai-operations
-
-## 元信息
-
-- **name**: chinapal-ai-operations
-- **description**: ChinaPal AI平台全流程运营技能，基于aihubai.cn真实运营经验。覆盖AI聚合平台从0到1运营、SEO内容创作、博客矩阵搭建、博主合作外联、流量路径规划、技术功能开发。适用于AI产品聚合平台运营、出海内容营销、独立站SEO优化、博主合作获客等场景。
 
 ## 适用场景
 

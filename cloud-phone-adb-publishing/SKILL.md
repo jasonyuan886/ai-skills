@@ -115,13 +115,7 @@ adb -s $DEV shell uiautomator dump /sdcard/t.xml && adb -s $DEV shell cat /sdcar
 
 ## 六、published_hint 不可信（重要）
 
-各平台脚本判断"发布成功"的方式是点完 Share 后抓一次 UI XML，看有没有 "sharing"/"published" 字样：
-```python
-published_hint = "sharing" in xml.lower() or "published" in xml.lower()
-```
-**界面稍变或抓取时机差几秒就检测不到，存在大量假阴性**——明明发出去了却记成"未确认"。实证：`oddly_satisfying_seal` 的 YouTube 明明 2026-09-21 06:27 已经上线，系统里却一条记录都没有。
-
-所以**绝不能拿 `published_hint=false` 当作"没发出去"去重发**，那会造成同平台重复发布。正确的核验方法见 [[publish-verification]]，队列侧的防重发机制见 [[content-queue-scheduling]]。
+脚本自报的 `published_hint`（点完 Share 后抓 UI XML 判断有没有 "sharing"/"published" 字样）存在大量假阴性，**不能拿它当"没发出去"去重发**，会造成同平台重复发布。完整原理、实证案例和正确核验方法见 [[publish-verification]]，队列侧的防重发机制见 [[content-queue-scheduling]]。
 
 ## 七、只读操作清单（安全，可随时执行）
 

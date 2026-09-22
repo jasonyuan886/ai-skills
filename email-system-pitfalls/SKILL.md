@@ -1,159 +1,30 @@
-# email-system-pitfalls
-
-> 企业邮箱系统搭建避坑指南，基于真实踩坑经验总结
-
-## Description
-
-企业邮箱系统搭建避坑指南，基于 Zoho 邮箱真实踩坑经验，覆盖向导页假报错、免费版功能限制、DNS 完整配置、域名持有者变更、版本选择等核心环节。帮助企业在搭建邮箱系统时避免常见陷阱，确保邮件送达率和业务连续性。
-
-## Trigger
-
-当用户提到以下场景时加载本技能：
-- 搭建企业邮箱系统
-- 配置 Zoho / Google Workspace / Microsoft 365 邮箱
-- DNS 邮件记录配置（MX / SPF / DKIM / DMARC）
-- 邮件送达率低、进垃圾箱
-- 企业邮箱版本选择
-- SMTP 自动化发送配置
-- 域名持有者信息变更
-
 ---
+name: email-system-pitfalls
+description: |
+  企业邮箱系统搭建避坑指南，基于 Zoho 邮箱真实踩坑经验，覆盖向导页假报错、免费版功能限制、DNS 完整配置、域名持有者变更、版本选择等核心环节。帮助企业在搭建邮箱系统时避免常见陷阱，确保邮件送达率和业务连续性。
+  触发场景：搭建企业邮箱系统、配置 Zoho/Google Workspace/Microsoft 365 邮箱、DNS 邮件记录配置(MX/SPF/DKIM/DMARC)、邮件送达率低进垃圾箱、企业邮箱版本选择、SMTP自动化发送配置、域名持有者信息变更。
+  注：Zoho向导页假报错、SMTP版本限制、MX/SPF/DKIM/DMARC完整配置这三个主题的详细操作步骤见 enterprise-email-setup 技能，本技能只保留它独有的两个坑（域名持有者变更、新主体用免费邮箱做B2B）。
+---
+
+# email-system-pitfalls
 
 ## 踩坑清单
 
-### 坑1：Zoho 向导页假报错
+### 坑1：Zoho 向导页假报错（简述，详见 enterprise-email-setup 技能）
 
-**问题现象**
-- 在 Zoho 管理后台完成域名配置后，向导页面显示错误信息（如"验证失败"、"配置未生效"等）
-- 用户以为配置失败，反复重试或放弃
-
-**根因分析**
-- Zoho 向导页的状态检测存在延迟，DNS 记录传播需要时间（全球 DNS 传播最长 24-48 小时）
-- 向导页的前端检测逻辑与实际后端配置状态不同步
-- 向导页可能在 DNS 尚未完全传播时就报告"失败"
-
-**解决方案**
-- **不要信任向导页的状态**，向导页报错不等于配置失败
-- 直接进入 Zoho Mail 后台 → Users 页面 → 点击 "Create mail account"
-- 如果能成功创建邮箱账号，说明域名验证和配置实际已生效
-- 使用 `dig` 或 `nslookup` 命令直接查询 DNS 记录验证：
-  ```bash
-  dig MX yourdomain.com
-  dig TXT yourdomain.com  # 查看 SPF
-  ```
-
-**预防措施**
-- 配置完成后，始终以"能否创建邮箱账号"作为验证标准，而非向导页状态
-- 记录配置时间，24 小时后再做一次全面验证
-- 用在线工具（如 MXToolbox）检查 DNS 记录
+Zoho 向导页报错不等于配置失败，DNS 传播有延迟，判断标准应是"能否成功创建邮箱账号"而非向导页状态。完整根因和验证步骤见 enterprise-email-setup。
 
 ---
 
-### 坑2：Zoho 免费版无 SMTP
+### 坑2：Zoho 免费版无 SMTP（简述，详见 enterprise-email-setup 技能）
 
-**问题现象**
-- 配置 SMTP 自动发送时连接失败
-- 错误信息：认证失败、连接被拒、端口不通
-- 手动在 Webmail 中发送正常，但程序化发送失败
-
-**根因分析**
-- **Zoho Mail Free 版本不支持 SMTP/POP/IMAP 访问**
-- 免费版只能通过 Webmail 界面收发邮件
-- 这是 Zoho 的功能限制，不是配置错误
-
-**解决方案**
-- 升级到 **Zoho Mail Lite** 版本（$15/年/用户，约 $1.25/月）
-- Lite 版本支持：
-  - ✅ SMTP 发送（smtp.zoho.com:465 SSL 或 587 TLS）
-  - ✅ IMAP 访问（imap.zoho.com:993）
-  - ✅ POP3 访问（pop.zoho.com:995）
-  - ✅ 5GB 存储/用户
-  - ✅ 自定义域名邮箱
-- 升级路径：Zoho 后台 → Subscription → Upgrade
-
-**预防措施**
-- 在选型阶段就明确需求：如果需要程序化/自动化发送邮件，免费版不可用
-- 选择版本时列出需求清单，对比各版本功能
-- Zoho 版本对比：
-
-  | 功能 | Free | Lite ($15/年) | Premium ($48/年) |
-  |------|------|---------------|-----------------|
-  | Webmail | ✅ | ✅ | ✅ |
-  | SMTP | ❌ | ✅ | ✅ |
-  | IMAP/POP | ❌ | ✅ | ✅ |
-  | 自定义域名 | ✅ | ✅ | ✅ |
-  | 存储/用户 | 5GB | 5GB | 50GB |
-  | 邮件别名 | ❌ | ❌ | ✅ |
-
-**SMTP 配置参数（Lite 及以上版本）**
-```
-SMTP 服务器: smtp.zoho.com
-端口: 465 (SSL) 或 587 (TLS/STARTTLS)
-认证: 用户名@域名 + 密码（或应用专用密码）
-```
+Zoho Mail Free 版本不支持 SMTP/POP/IMAP，需升级 Lite 版（$15/年/用户）才能程序化发送邮件。完整版本对比表和 SMTP 配置参数见 enterprise-email-setup。
 
 ---
 
-### 坑3：DNS 配置遗漏（MX/SPF/DKIM/DMARC 不完整）
+### 坑3：DNS 配置遗漏 MX/SPF/DKIM/DMARC（简述，详见 enterprise-email-setup 技能）
 
-**问题现象**
-- 发出的邮件大量进入收件人垃圾箱
-- 部分邮件服务器直接拒收
-- 邮件头显示 "SPF fail" 或 "DMARC fail"
-
-**根因分析**
-- 只配置了 MX 记录（收件路由），忽略了发件认证记录
-- 现代邮件系统要求完整的认证链：
-  - **MX**: 指定邮件服务器（收件必需）
-  - **SPF**: 声明哪些 IP 可以代你发邮件（发件认证）
-  - **DKIM**: 邮件数字签名，防篡改（发件认证）
-  - **DMARC**: 告诉收件方如何处理认证失败的邮件（策略声明）
-
-**完整 DNS 配置清单**
-
-#### MX 记录（收件路由）
-```
-优先级 10: mx.zoho.com
-优先级 20: mx2.zoho.com
-优先级 50: mx3.zoho.com（备用）
-```
-
-#### SPF 记录（TXT 类型）
-```
-v=spf1 include:zoho.com ~all
-```
-- `~all` = softfail（推荐初始配置）
-- `-all` = hardfail（严格模式，确认无误后切换）
-
-#### DKIM 记录（TXT 类型）
-- 在 Zoho 后台 → Email Hosting → Domain 设置 → DKIM 中获取选择器名称和公钥
-- 格式：`selector._domainkey.yourdomain.com` → `v=DKIM1; k=rsa; p=公钥内容`
-- **注意**：选择器名称因域名而异，必须从 Zoho 后台获取
-
-#### DMARC 记录（TXT 类型）
-```
-_dmarc.yourdomain.com → v=DMARC1; p=none; rua=mailto:dmarc@yourdomain.com
-```
-- `p=none`: 监控模式（初始推荐）
-- `p=quarantine`: 认证失败进垃圾箱
-- `p=reject`: 认证失败直接拒收
-- `rua=`: 接收 DMARC 聚合报告的邮箱
-
-**解决方案**
-- 按以上清单逐一配置所有 DNS 记录
-- 使用 MXToolbox (mxtoolbox.com) 的 Email Health Check 工具一键验证
-- 或命令行验证：
-  ```bash
-  dig MX yourdomain.com
-  dig TXT yourdomain.com
-  dig TXT selector._domainkey.yourdomain.com
-  dig TXT _dmarc.yourdomain.com
-  ```
-
-**预防措施**
-- 将 DNS 配置清单作为标准模板，每次新建域名邮箱时逐项核对
-- 配置完成后用在线工具验证全部记录
-- DMARC 策略从 `p=none` 开始，观察报告 30 天后再逐步收紧
+只配 MX 不配 SPF/DKIM/DMARC 会导致邮件大量进垃圾箱甚至被拒收。完整 DNS 配置清单和验证命令见 enterprise-email-setup。
 
 ---
 

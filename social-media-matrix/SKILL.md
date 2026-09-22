@@ -19,7 +19,7 @@ description: |
 
 ### 1.1 唯一操作通道
 - **所有社媒/云手机操作只走 VPS（192.236.171.76）+ GeeLark US Reality ADB**
-- GeeLark US Reality 设备 ID：`635151138366175341`
+- GeeLark US Reality 设备 ID：`635151138366175341` ⚠️ 设备重建后此ID会变化，使用前需先用GeeLark控制台或API核实当前实际设备ID
 - 设备类型：US Reality，美国家庭住宅 IP，按分钟计费
 
 ### 1.2 禁止使用的通道

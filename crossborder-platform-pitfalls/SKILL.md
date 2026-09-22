@@ -1,15 +1,10 @@
+---
+name: crossborder-platform-pitfalls
+description: |
+  跨境平台运营避坑指南，基于美客多/Europages等真实踩坑经验。覆盖 B2B 平台入驻、南美电商平台运营、物流退货设计等关键环节。
+---
+
 # 跨境平台运营避坑指南
-
-- name: crossborder-platform-pitfalls
-- description: 跨境平台运营避坑指南，基于美客多/Europages等真实踩坑经验
-
----
-
-## 概述
-
-本技能为跨境电商卖家提供平台运营中的常见坑点总结与避坑策略。所有经验均来自真实踩坑，覆盖 B2B 平台入驻、南美电商平台运营、物流退货设计等关键环节。
-
----
 
 ## 一、踩坑清单
 
