@@ -12,9 +12,27 @@ description: |
 
 # 云手机 ADB 视频发布全链路
 
-**发布完全靠云手机上的真实 App 完成，不走任何平台 API**：`adb push` 把视频推进相册 → `am start` 打开 App → `uiautomator dump` 抓界面找按钮坐标 → `input tap` 逐个点过去。
+**动手写 ADB 点击流之前，先确认该平台有没有官方 RPA 模板——有就别用 ADB。**
 
-参考实现（FreshLock）：`automation/{instagram,tiktok,facebook,youtube}_adb_flow.py`，公共原语在 `automation/social_adb_common.py`。
+GeeLark Base 套餐的 OpenAPI 里，YouTube 有官方发布端点，实测一次成功：
+```bash
+POST https://openapi.geelark.com/open/v1/rpa/task/youtubePubShort
+必填: id(设备ID) / scheduleAt(unix秒) / title / video(公网URL) / originalVoice / sameStyleVoice
+POST /task/query  查进度  status: 1排队 2执行中 3完成 4失败 7取消
+```
+2026-09-22 实测：`taskId=638474551243630178`，耗时 275s，YouTube 公开 feed 确认上线。
+`video` 字段直接收公网 URL，不用先传到 GeeLark。素材托管建议放已有的公开站点（CDN），
+**不要为此在运维域名上新开无鉴权静态入口**。
+
+IG / TikTok / Facebook 在 Base 套餐**没有对应 RPA 模板**，才需要下面的 ADB 方案。
+能力边界以 GeeLark 实际返回为准，动手前先查项目内的云手机手册（本项目是
+`/root/.claude/CLOUD_PHONE.md`）——**这一步跳过的代价是几天的无效排查**。
+
+ADB 方案的本质：`adb push` 推视频进相册 → `am start` 打开 App → `uiautomator dump`
+抓界面找元素 → `input tap` 逐个点过去。
+
+参考实现（FreshLock）：`automation/{instagram,tiktok,facebook}_adb_flow.py`，
+公共原语在 `automation/social_adb_common.py`；YouTube 走 `youtube_rpa_publish.py`。
 
 ## 一、ADB 就绪：唯一正确的时序
 
@@ -51,7 +69,23 @@ App 冷启动后会先白屏。固定 `sleep(8)` 之后截图，拿到的是**�
 
 ✅ 正确做法：循环 `uiautomator dump` 抓界面层级，直到解析出的 `text`/`content-desc` 条数达到阈值（比如 ≥3 条）再截图，上限 45 秒。
 
-这条和第一节是同一个教训的两种表现：**凡是"等外部系统就绪"，一律轮询实际状态，不要固定 sleep。**
+**第三种表现：App 启动后的闪屏。** 2026-09-22 实测 TikTok 冷启动 15 秒后，前台仍停在
+`com.ss.android.ugc.aweme.splash.SplashActivity`，界面上一个可点元素都没有。原来的
+`launch_app` 固定 `sleep(4)` 就返回，后续 dump/tap 全部落空，脚本却一路静默跑到结尾。
+
+✅ `launch_app` 正确写法：轮询前台 Activity，**必须已属目标包、且不再停留在 Splash/Launch 页**才返回：
+```python
+adb(dev,"shell","monkey","-p",pkg,"-c","android.intent.category.LAUNCHER","1")
+while time.time() < end:
+    time.sleep(3)
+    cur = 解析 dumpsys window 的 mCurrentFocus
+    if pkg in cur and not re.search(r"(Splash|Launch)", cur, re.I):
+        time.sleep(2); return
+```
+
+同一个教训在这个项目里**一天之内出现了三次**（ADB connect 后的 offline 期、App 冷启动白屏、
+启动闪屏）。所以这不是个案：**凡是"等外部系统就绪"，一律轮询实际状态；代码里出现固定
+sleep 就当作缺陷对待。**
 
 ## 三、进 App 指定页面：深度链接优先，兜底才点击
 
@@ -86,6 +120,37 @@ monkey -p <包名> -c android.intent.category.LAUNCHER 1
 - YouTube: `You` / `Account`
 
 这样即使定位失败也只是找不到元素，不会误触到 Share/Post 把东西发出去。
+
+## 三之二、发布入口：元素名会变，而坐标兜底比失败更糟
+
+2026-09-22 真机逐屏排查 Instagram，查出连续多日失败的根因，值得当反面教材：
+
+脚本找 `desc="Create New"`——**该元素在当前版本根本不存在**。实测首屏底部导航只有
+`Home / Reels / Message / Search and explore / Profile` 五项，没有"+"创建键；唯一创建入口是
+左上角 `desc="Create a reel"` @[0,53][77,130]。
+
+更糟的是找不到时的兜底逻辑"点屏幕底部居中 `(w/2, h*0.895)`"——该坐标恰好落在信息流帖子的
+`See more` @[26,1213][635,1252] 上，等于**点开了别人帖子的展开全文**。流程从这里断掉，之后
+所有 tap 全打在空处，脚本一路静默跑到结尾。
+
+✅ 正确做法：
+- 找不到入口就**抛错终止**，要求重新真机排查。盲点坐标既不可能成功，还会在别人的信息流里
+  乱点，有误互动风险
+- 多版本兼容用**多个具名元素备选**（新名 or 旧名），不要用坐标兜底
+
+**各平台创建入口实测（2026-09-22）**：
+
+| 平台 | 创建入口 | 点进去之后 |
+|---|---|---|
+| Instagram | `desc="Create a reel"`（左上角） | **直接进拍摄相机** `ModalActivity`，要再点左下角 `Gallery` 才到相册 |
+| Facebook | 启动即被 Google Play 更新弹窗盖住 | 先点 `desc="Dismiss update dialog"` 才能用 |
+
+注意"点创建 → 直接进相机而非选项菜单"这个模式在 IG 和 YouTube 上都出现过，
+**别假设点了"+"会弹出菜单让你选"发帖/快拍/Reel"**。
+
+另外：有些拦路弹窗**只有 content-desc 没有 text**（如 Google Play 更新弹窗的关闭键），
+只按 text 匹配的通用关弹窗函数会完全抓不到，需要补一轮 desc 匹配。但 desc 白名单里
+**只能收语义明确的纯关闭项**，绝不能混入 Share/Post 这类提交按钮。
 
 ## 四、成本控制：用完立刻关机
 
