@@ -22,6 +22,7 @@
 | `vps-watchdog-pattern` | VPS看门狗脚本设计模式（自愈/预警/共享服务重启的验证边界） |
 | `customer-inquiry-response` | 客户询盘回复审批流程（冷邮件可直发 vs 客户回信必须确认再发） |
 | `outreach-hypothesis-review` | 假设驱动的外联/内容效果复盘方法论（真实数据核验/排除噪音/持续迭代假设） |
+| `deepseek-task-routing` | DeepSeek任务分流策略（结构化/批量任务分流省额度，API连通已验证，效果数据积累中） |
 
 ## 📕 避坑指南技能
 
