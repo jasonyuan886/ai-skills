@@ -6,7 +6,7 @@
 
 | 技能 | 说明 |
 |------|------|
-| `dtc-site-operations` | DTC独立站全链路运营（建站/部署/SEO/GEO/PayPal/信任体系） |
+| `dtc-site-operations` | DTC独立站全链路运营（建站/部署/SEO/GEO/PayPal/信任体系）；附 references/ 28份实操沉淀（建站SOP/SEO审计/GEO/GA4/30篇博客成品） |
 | `b2b-cold-email` | 外贸B端冷邮件获客全流程（线索库/预热/批量发送/跟进） |
 | `social-media-matrix` | 社媒矩阵运营（LinkedIn/Telegram/X，GeeLark云手机ADB） |
 | `short-video-batch` | 短视频批量制作与多平台发布（Ken Burns/热点快速响应） |

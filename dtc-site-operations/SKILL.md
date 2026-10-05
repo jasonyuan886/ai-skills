@@ -457,6 +457,28 @@ curl -X POST "https://api.cloudflare.com/client/v4/zones/{zone_id}/purge_cache" 
 
 ---
 
+## 深度参考资料（references/）
+
+本技能附带 FreshLock 真实项目全套实操沉淀，共 28 个文件，按需读取：
+
+| 目录 | 内容 |
+|------|------|
+| `references/01_建站全流程/` | 25页建站SOP + 16页全流程手册 + 全量任务手册 |
+| `references/02_SEO/` | SEO审计报告、外链建设、内链映射、UTM规范、3期SEO周报 |
+| `references/03_GEO_AI导购/` | GEO优化与PayPal幂等经验、geo权威页成品、交易型问题库 |
+| `references/04_GA4_GSC数据分析/` | GA4/GSC流量日报样例、GSC索引诊断方案 |
+| `references/05_内容模板/` | 30篇SEO博客成品（选题+正文） |
+
+先读 `references/README_先读我.md` 获取阅读顺序与关键经验速记。
+整包下载：`FreshLock建站经验包.zip`。
+
+**GEO 核心补充（AI时代的SEO）：**
+- SEO 已升级为 GEO：让 ChatGPT/Grok/Perplexity 记对品牌名、给对官网，靠品牌实体一致性 + llms.txt + 权威页 + robots 放行 AI 爬虫
+- GA4 埋点：gtag + 电商事件，purchase 走服务端 Measurement Protocol，过滤 CN/HK/机房流量
+- PayPal 必须商户侧自建幂等，不能依赖 PayPal 窗口（18 封重复订单邮件教训）
+
+---
+
 ## 检查清单（上线前必过）
 
 - [ ] 所有页面英文无中文残留
